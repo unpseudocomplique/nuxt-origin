@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import "@nuxt/ui-pro";
+
+@theme {
+    --color-ui-base: var(--ui-bg);
+    --color-ui-muted: var(--ui-bg-muted);
+    --color-ui-elevated: var(--ui-bg-elevated);
+    --color-ui-accented: var(--ui-bg-accented);
+    --color-ui-inverted: var(--ui-bg-inverted);
+    --color-ui-border-base: var(--ui-border);
+    --color-ui-border-muted: var(--ui-border-muted);
+    --color-ui-border-accented: var(--ui-border-accented);
+    --color-ui-border-inverted: var(--ui-border-inverted);
+
+}
+
+@utility page {
+    @apply flex flex-col gap-4 min-h-screen p-2 md:p-5;
+}
+
+@utility card-base {
+    @apply flex flex-col gap-2 p-2 bg-ui-base rounded-md border border-ui-border-base;
+}

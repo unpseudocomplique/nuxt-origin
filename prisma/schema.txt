@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id               String             @id @default(uuid())
+  display          String
+  domain           String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  UserOrganization UserOrganization[]
+  Profile          Profile[]
+}
+
+model Profile {
+  id               String             @id @default(uuid())
+  display          String
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  organization     Organization       @relation(fields: [organizationId], references: [id])
+  organizationId   String
+  UserOrganization UserOrganization[]
+}
+
+model User {
+  id                     String             @id @default(uuid())
+  email                  String             @unique
+  firstname              String
+  lastname               String
+  password               String
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  UserOrganization       UserOrganization[] @relation(name: "userRelatedToOrg")
+  selectedOrganization   UserOrganization  @relation(fields: [selectedOrganizationId], references: [id], name: "orgSelected")
+  selectedOrganizationId String
+}
+
+model UserOrganization {
+  id             String       @id @default(uuid())
+  display        String
+  userId         String
+  organizationId String
+  profileId      String
+  email          String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  user           User         @relation(fields: [userId], references: [id], name: "userRelatedToOrg")
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  profile        Profile      @relation(fields: [profileId], references: [id])
+  userSelected   User[]       @relation(name: "orgSelected")
+
+  @@unique([organizationId, userId])
+}
